@@ -16,13 +16,13 @@ public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBro
     @Override
     protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
         messages
-                .simpDestMatchers("/chat/**").permitAll()
+                .simpMessageDestMatchers("/Chat").permitAll()
+                .simpDestMatchers("/Chat").permitAll()
+                .simpDestMatchers("/Chat").hasAnyRole("ADMIN", "USER")
                 .simpDestMatchers("/app/**").hasRole("ADMIN")
                 .simpDestMatchers("/app/**").hasRole("USER")
                 .simpSubscribeDestMatchers("/topic/**").authenticated()
-                .anyMessage().authenticated()
-                .simpTypeMatchers(SimpMessageType.CONNECT,SimpMessageType.UNSUBSCRIBE, SimpMessageType.SUBSCRIBE, SimpMessageType.DISCONNECT);
-
+                .anyMessage().denyAll()
+                .simpTypeMatchers(SimpMessageType.OTHER, SimpMessageType.CONNECT,SimpMessageType.UNSUBSCRIBE, SimpMessageType.SUBSCRIBE, SimpMessageType.DISCONNECT).denyAll();
     }
-
 }
