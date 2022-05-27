@@ -2,6 +2,7 @@ package uz.agro.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,10 +18,6 @@ import uz.agro.security.security.jwt.JwtTokenProvider;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().mvcMatchers("*");
-    }
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -37,15 +34,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .cors().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests()
+                .antMatchers("/chat/room/**").permitAll()
                 .antMatchers("/api/v1/auth/login").permitAll()
                 .antMatchers("/api/v1/auth/register").permitAll()
                 .antMatchers("/api/v1/auth/me").permitAll()
-                .antMatchers("/Chat/**").permitAll()
+                .antMatchers("/chat/**").permitAll()
+                .antMatchers("/api/v1/user/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()

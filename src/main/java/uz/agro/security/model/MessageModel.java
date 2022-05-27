@@ -9,5 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MessageModel {
     private String message;
-    private String fromLogin;
+    private String from;
+    private String to;
+
+    public MessageModel(String message, String from) {
+        this.message = message;
+        this.from = from;
+    }
+
+    public MessageModel(String message) {
+        this.message = message;
+    }
 }

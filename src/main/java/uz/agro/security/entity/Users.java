@@ -1,14 +1,14 @@
 package uz.agro.security.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import uz.agro.security.entity.abstractEntity.AbstractEntity;
+import uz.agro.security.entity.helper.UserHelper;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -27,7 +27,7 @@ public class Users extends AbstractEntity {
     private List<Roles> rolesList;
 
     @ManyToMany
-    private List<Users> subScribes;
-
+    @JsonIgnore(value = true)
+    List<Users> friends;
 
 }

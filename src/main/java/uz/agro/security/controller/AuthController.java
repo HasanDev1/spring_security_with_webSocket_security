@@ -1,5 +1,6 @@
 package uz.agro.security.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,6 +19,7 @@ import uz.agro.security.service.UserService;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 @CrossOrigin(origins = "*", maxAge = 3600L)
@@ -41,6 +43,7 @@ public class AuthController {
     public ResponseEntity login(@RequestBody RequestLogin login){
         try {
             String username = login.getUsername();
+            log.info("login request - {}", login);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, login.getPassword()));
             Users users = userService.findByUsername(username);
             if(users == null){
@@ -65,6 +68,7 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity getMe(){
         String username = securityUtils.getCurrentUser().orElseThrow(()->new RuntimeException("current user not found"));
+        System.out.println(username);
         return ResponseEntity.ok(userRepository.findByUsername(username));
     }
 
